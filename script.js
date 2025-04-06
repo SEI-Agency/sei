@@ -1,28 +1,20 @@
-const passwords = {
-  "3xTr#9@pLz!Q": 1,
-  "R7g$1*aY8w%Fn": 2,
-  "jK4^s2&mD6#vX": 3,
-  "P9q!5@hZ3*bUl": 4,
-  "yE6$8&cN1#aTw": 5,
-  "zL2^7@fR4*dXk": 6
-};
-
-// Lógica do login
-const loginForm = document.getElementById("loginForm");
-if (loginForm) {
-  loginForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const password = document.getElementById("password").value;
-    const level = passwords[password];
-    if (level) {
-      localStorage.setItem("accessLevel", level);
+fetch("https://beckend-rd9q.onrender.com/validate", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ key: "3xTr#9@pLz!Q" })  
+})
+  .then(res => res.json())
+  .then(data => {
+    if (data.accessLevel) {
+      localStorage.setItem("accessLevel", data.accessLevel);
       window.location.href = "home.html";
-    } else if (password === "") {
     } else {
-      alert("Senha incorreta.");
+      alert("Chave inválida");
     }
-  });
-}
+  })
+  .catch(err => console.error("Erro ao validar chave:", err));
 
 // Lógica de exibição dos documentos
 const docContainer = document.getElementById("doc-container");
