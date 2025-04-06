@@ -1,5 +1,5 @@
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault(); 
+  e.preventDefault(); // 👈 Impede o reload da página
 
   const accessKey = document.getElementById("password").value.trim();
 
@@ -25,6 +25,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     alert("Erro ao conectar ao servidor.");
   }
 });
+
 
 
 const docContainer = document.getElementById("doc-container");
