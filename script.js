@@ -1,38 +1,46 @@
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault(); // 👈 Impede o reload da página
+// =======================
+// LOGIN (index.html)
+// =======================
+const loginForm = document.getElementById("loginForm");
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault(); // Impede o reload da página
 
-  const accessKey = document.getElementById("password").value.trim();
+    const accessKey = document.getElementById("password").value.trim();
 
-  try {
-    const response = await fetch("https://beckend-rd9q.onrender.com/verify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ accessKey })
-    });
+    try {
+      const response = await fetch("https://beckend-rd9q.onrender.com/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ accessKey })
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (data.success) {
-      localStorage.setItem("accessLevel", data.level);
-      window.location.href = "home.html"; // Redireciona se válido
-    } else {
-      alert("Chave inválida.");
+      if (data.success) {
+        localStorage.setItem("accessLevel", data.level);
+        window.location.href = "home.html"; // Redireciona se válido
+      } else {
+        alert("Chave inválida.");
+      }
+    } catch (error) {
+      console.error("Erro ao verificar chave:", error);
+      alert("Erro ao conectar ao servidor.");
     }
-  } catch (error) {
-    console.error("Erro ao verificar chave:", error);
-    alert("Erro ao conectar ao servidor.");
-  }
-});
+  });
+}
 
 
-
+// =======================
+// HOME (home.html)
+// =======================
 const docContainer = document.getElementById("doc-container");
 if (docContainer) {
   const accessLevel = parseInt(localStorage.getItem("accessLevel"));
 
-  if (!accessLevel) {
+  if (isNaN(accessLevel)) {
     alert("Acesso negado. Faça login.");
     window.location.href = "index.html";
   }
@@ -59,13 +67,15 @@ if (docContainer) {
     }
   ];
 
+  // Cria os cards permitidos para o nível de acesso
   docs.forEach(doc => {
     if (accessLevel >= doc.nivel) {
       const div = document.createElement("div");
       div.className = "card";
-      div.innerHTML = `<h3>${doc.titulo}</h3>
-                       <p>${doc.descricao}</p>
-                       <a href="${doc.link}" target="_blank">Acessar Documento</a>`;
+      div.innerHTML = `
+        <h3>${doc.titulo}</h3>
+        <p>${doc.descricao}</p>
+        <a href="${doc.link}" target="_blank">Acessar Documento</a>`;
       docContainer.appendChild(div);
     }
   });
