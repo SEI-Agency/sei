@@ -1,33 +1,28 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("login-form");
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const accessKey = document.getElementById("accessKey").value.trim();
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  try {
+    const response = await fetch("https://beckend-rd9q.onrender.com/verify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ accessKey })
+    });
 
-    const key = document.getElementById("access-key").value;
+    const data = await response.json();
 
-    try {
-      const response = await fetch("https://beckend-rd9q.onrender.com/validate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ key })
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.accessLevel) {
-        localStorage.setItem("accessLevel", data.accessLevel);
-        window.location.href = "home.html";
-      } else {
-        alert("Chave inválida. Tente novamente.");
-      }
-    } catch (err) {
-      console.error("Erro ao validar a chave:", err);
-      alert("Erro ao conectar com o servidor.");
+    if (data.success) {
+      localStorage.setItem("accessLevel", data.level);
+      window.location.href = "home.html";  // 👈 redirecionamento
+    } else {
+      alert("Chave inválida.");
     }
-  });
+  } catch (error) {
+    console.error("Erro ao verificar chave:", error);
+    alert("Erro ao conectar ao servidor.");
+  }
+});
 
 
 const docContainer = document.getElementById("doc-container");
