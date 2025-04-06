@@ -1,22 +1,35 @@
-fetch("https://beckend-rd9q.onrender.com/validate", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ key: "3xTr#9@pLz!Q" })  
-})
-  .then(res => res.json())
-  .then(data => {
-    if (data.accessLevel) {
-      localStorage.setItem("accessLevel", data.accessLevel);
-      window.location.href = "home.html";
-    } else {
-      alert("Chave inválida");
-    }
-  })
-  .catch(err => console.error("Erro ao validar chave:", err));
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("login-form");
 
-// Lógica de exibição dos documentos
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const key = document.getElementById("access-key").value;
+
+    try {
+      const response = await fetch("https://beckend-rd9q.onrender.com/validate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ key })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.accessLevel) {
+        localStorage.setItem("accessLevel", data.accessLevel);
+        window.location.href = "home.html";
+      } else {
+        alert("Chave inválida. Tente novamente.");
+      }
+    } catch (err) {
+      console.error("Erro ao validar a chave:", err);
+      alert("Erro ao conectar com o servidor.");
+    }
+  });
+
+
 const docContainer = document.getElementById("doc-container");
 if (docContainer) {
   const accessLevel = parseInt(localStorage.getItem("accessLevel"));
