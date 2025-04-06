@@ -1,5 +1,7 @@
-document.getElementById("loginBtn").addEventListener("click", async () => {
-  const accessKey = document.getElementById("accessKey").value.trim();
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault(); 
+
+  const accessKey = document.getElementById("password").value.trim();
 
   try {
     const response = await fetch("https://beckend-rd9q.onrender.com/verify", {
@@ -14,7 +16,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
 
     if (data.success) {
       localStorage.setItem("accessLevel", data.level);
-      window.location.href = "home.html";  // 👈 redirecionamento
+      window.location.href = "home.html"; // Redireciona se válido
     } else {
       alert("Chave inválida.");
     }
