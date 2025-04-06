@@ -5,7 +5,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const accessKey = document.getElementById("password").value.trim();
 
   try {
-    const response = await fetch("https://beckend-rd9q.onrender.com/verify", {
+    const response = await fetch("https://beckend-rd9q.onrender.com/validate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
